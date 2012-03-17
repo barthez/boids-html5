@@ -1,3 +1,4 @@
+var THEME = 'fish';
 
 function ColorGenerator(colorArray) {
     this.lastColor = 0;
@@ -78,7 +79,6 @@ Boid.prototype = new Vector();
 Boid.prototype.constructor = Boid;
 
 Boid.prototype.draw = function(ctx) {
-//    debugger
     ctx.fillStyle = this.color;
     var v_length = this.velocity.length();
     var sin = this.velocity.x/v_length;
@@ -87,11 +87,17 @@ Boid.prototype.draw = function(ctx) {
     ctx.setTransform(cos,-sin,sin,cos,this.x, this.y);
 
     ctx.beginPath();
-    ctx.moveTo(0, 10);
-    ctx.lineTo(6, -10);
-//    ctx.lineTo(0, -5);
-    ctx.lineTo(-6, -10);
-    ctx.lineTo(0,  10);
+    if (THEME === 'fish') {
+	ctx.moveTo(0,0);
+	ctx.arc(0, 0, 3, Math.PI, 2*Math.PI, true);
+	ctx.lineTo(0, -15);
+	ctx.lineTo(-3, 0);
+    } else {
+	ctx.moveTo(0, 10);
+	ctx.lineTo(6, -10);
+	ctx.lineTo(-6, -10);
+	ctx.lineTo(0,  10);
+    }
     ctx.closePath();
     ctx.fill();
 
