@@ -102,13 +102,13 @@ Boid.prototype.draw = function(ctx) {
 Boid.prototype.update = function(boids) {
 //    console.log(this.toString());
 //    console.log("Updating " + this.id);
-    if (this.color == '#000') {
-	debugger
-    }
+//    if (this.color == '#000') {
+//	debugger
+//    }
     var v = new Vector(0,0);
     for(var i=0; i<this.rules.length; ++i) {
 	var v1 = this.rules[i](this, boids);
-	debugger;
+//	debugger;
 	v.add(v1);
     }
 //    debugger
