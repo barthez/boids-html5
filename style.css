@@ -1,0 +1,21 @@
+body {
+  width: 802px;
+  margin: 0 auto;
+  font-family: Tahoma, Verdana, sans-serif;
+}
+
+canvas#boids_canvas {
+  border: #000 1px solid;
+  width: 800px;
+  height: 600px;
+  display: block;
+}
+
+a, a:link, a:visited {
+    color: #009999;
+    text-decoration: none;
+}
+
+a:hover, a:focus {
+    text-decoration: underline;
+}
