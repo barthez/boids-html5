@@ -88,20 +88,23 @@ Boid.prototype.draw = function(ctx) {
 
     ctx.beginPath();
     ctx.moveTo(0, 10);
-    ctx.lineTo(8, -10);
-    ctx.lineTo(0, -5);
-    ctx.lineTo(-8, -8);
+    ctx.lineTo(6, -10);
+//    ctx.lineTo(0, -5);
+    ctx.lineTo(-6, -10);
     ctx.lineTo(0,  10);
     ctx.closePath();
     ctx.fill();
 
-    ctx.setTransform(1,0,0,1,this.x, this.y);    
-    this.velocity.draw(ctx);
+//    ctx.setTransform(1,0,0,1,this.x, this.y);    
+//    this.velocity.draw(ctx);
 }
 
 Boid.prototype.update = function(boids) {
 //    console.log(this.toString());
 //    console.log("Updating " + this.id);
+    if (this.color == '#000') {
+	debugger
+    }
     var v = new Vector(0,0);
     for(var i=0; i<this.rules.length; ++i) {
 	var v1 = this.rules[i](this, boids);
@@ -127,11 +130,14 @@ Boid.prototype.rules = [
 	
 	for(var i=0; i < boids.length; ++i) {
 	    if (boids[i].id != b.id) {
-		vel.add(boids[i]);
+		//var v_diff = b.copy().diff(boids[i]);
+		//if (v_diff.length() < 500) {
+		    vel.add(boids[i]);
+		//}
 	    }
 	}
 	//debugger;
-	return vel.times(1/(boids.length-1)).diff(b).times(1/10000);
+	return vel.times(1/(boids.length-1)).diff(b).times(1/500);
     },
     //RULE2: Keep distance from nearest boids
     function(b, boids) {
@@ -140,13 +146,13 @@ Boid.prototype.rules = [
 	for(var i=0; i < boids.length; ++i) {
 	    if (boids[i].id != b.id) {
 		var v_diff = b.copy().diff(boids[i]);
-		if (v_diff.length() < 1000) {
+		if (v_diff.length() < 60) {
 		    vel.diff(v_diff);
 		}
 	    }
 	}
 	//debugger;
-	return vel.times(1/2000);
+	return vel.times(-1/100);
     },
     //RULE3: Keep mean velocity of swarm
     function(b, boids) {
@@ -158,12 +164,12 @@ Boid.prototype.rules = [
 	    }
 	}
 	//debugger;
-	return vel.times( 1/(boids.length-1) ).diff(b.velocity).times(1/800);
+	return vel.times( 1/(boids.length-1) ).diff(b.velocity).times(1/50);
     },
     //RULE4: Don't go out of box
     function(b) {
 	var vel = new Vector(0,0);
-	var power = 1;
+	var power = 10;
  	if (b.x < 10) {
 	    vel.x = power;
 	} else if (b.x > 790) {
@@ -192,6 +198,7 @@ function Simulation(ctx) {
     this._last_time = 0;
     this._is_running = false;
     this._boids_color_generator = new ColorGenerator([
+	'#000',
 	'#ff4040',
 	'#ff0000',
 	'#a60000',
@@ -204,6 +211,7 @@ function Simulation(ctx) {
 	'#269926',
 	'#0c0',
 	'#67e667'
+
     ]);
 }
 
