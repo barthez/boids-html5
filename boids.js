@@ -169,17 +169,18 @@ Boid.prototype.rules = [
     //RULE4: Don't go out of box
     function(b) {
 	var vel = new Vector(0,0);
-	var power = 10;
- 	if (b.x < 10) {
-	    vel.x = power;
-	} else if (b.x > 790) {
-	    vel.x = -power;
+	var power = 0.02;
+	var d = 50;
+ 	if (b.x < d) {
+	    vel.x = (d - b.x)*power;
+	} else if (b.x > 800 - d) {
+	    vel.x = (800 - d - b.x)*power;
 	}
 
- 	if (b.y < 10) {
-	    vel.y = power;
-	} else if (b.y > 590) {
-	    vel.y = -power;
+ 	if (b.y < d) {
+	    vel.y = (d - b.y)*power;
+	} else if (b.y > 600 -d) {
+	    vel.y = (600 -d - b.y)*power;
 	}
 
 	return vel;
