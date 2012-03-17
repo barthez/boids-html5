@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
 <title>Boids</title>
 <script type="text/javascript" src="./requestAnimationFrame.js" ></script>
 <script type="text/javascript" src="./boids.js" ></script>
@@ -9,7 +10,22 @@
 
 <body>
 <canvas id="boids_canvas" width="800" height="600"></canvas>
-<div id="panel"></div>
+<div id="panel">
+  <form id="settings" method="post" action="">
+    <div class="field">
+      <label for="play">Play</label>
+      <input type="button" value="&#9654;" name="play" id="settings_play" />
+    </div>
+    <div class="field">
+      <label for="pause">Pause</label>
+      <input type="button" value="&#9646;&#9646;" name="pause" id="settings_pause" />
+    </div>
+    <div class="field">
+      <label for="boids_number">Boids number</label>
+      <input type="number" name="boids_number" id="settings_boids_number" min="2" max="20" value="10" />
+    </div>
+  </form>
+</div>
 <div id="footer">
   <p>GitHub repository: <a href="https://github.com/barthez/boids-html5" target="_blank">https://github.com/barthez/boids-html5</a></p>
 </div>

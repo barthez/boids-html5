@@ -216,23 +216,49 @@ function Simulation(ctx, boids_number) {
 	'#67e667'
 
     ]);
+
+    this.__init();
 }
 
 Simulation.prototype.run = function() {
     this._is_running = true;
-    this.__init();
     this.__animate()
 };
 
 Simulation.prototype.play = function() {
+    if(this._is_running) return false;
     this._is_running = true;
     this.__animate()
+    return true;
 };
 
 
 Simulation.prototype.pause = function() {
     this._is_running = false;
+    return true;
 };
+
+
+Simulation.prototype.updateBoidsNumber = function(number) {
+    if(!number || number < 2) number = 2;
+    var diff = number - this._boids.length;
+    if (diff > 0) {
+    for(var i=0; i<diff; ++i) {
+	var x = (0.5 + Math.random() * 800) | 0;
+	var y = (0.5 + Math.random() * 600) | 0;	    
+	var b = new Boid(Boid.getNextId(), x, y);
+	b.color = this._boids_color_generator.nextColor();
+	this._boids.push(b);
+    }
+	
+    } else if (diff < 0) {
+	var d = Math.abs(diff);
+	this._boids.splice(this._boids.length-d,d);
+	this._boids_number = this._boids.length;
+    }
+    return false;
+};
+
 
 
 Simulation.prototype.__init = function() {
@@ -256,23 +282,9 @@ Simulation.prototype.__animate = function() {
 };
 
 Simulation.prototype.__update = function() {
-/*    var time_diff = Date.now() - this._last_time;
-    console.log(time_diff);
-    if (time_diff > 2000) {
-	this._last_time = Date.now();
-	var x = (0.5 + Math.random() * 800) | 0;
-	var y = (0.5 + Math.random() * 600) | 0;	    
-	if(Math.random() > 0.5) {
-	    this._bodies.push(new Boid(Boid.getNextId(), x, y));
-	} else {
-	    this._bodies.push(new Vector(x, y));
-	}
-    }
-*/
     for(var i=0; i < this._boids.length; i++) {
 	this._boids[i].update(this._boids);
     }
-//    console.log("update");
 };
 
 Simulation.prototype.__draw = function() {
@@ -290,18 +302,32 @@ Simulation.prototype.__draw = function() {
 	var context = canvas.getContext('2d');
 
 	var sim = new Simulation(context, 10);
+
+	var settings_form = document.getElementById('settings');
+	settings.addEventListener('submit', function(event) {
+	    event.preventDefault();
+	}, true);
+
+	var play_button = document.getElementById('settings_play');
+	play_button.addEventListener('click', function() {
+	    sim.play();
+	}, true);
+
+	var pause_button = document.getElementById('settings_pause');
+	pause_button.addEventListener('click', function() {
+	    sim.pause();
+	}, true);
+
+	var boids_number = document.getElementById('settings_boids_number');
+	boids_number.addEventListener('input', function(event) {
+	    if (boids_number.validity.valid) {
+		sim.updateBoidsNumber(boids_number.value);
+	    }
+	}, true);
+
+	//Run simulation
 	sim.run();
 
-//	var drawRandomPoint = function() {
-//	    var x = (0.5 + Math.random() * 800) | 0;
-//	    var y = (0.5 + Math.random() * 600) | 0;
-//	    var v = new Vector(x, y);
-//	    v.draw(context);
-//	    setTimeout(drawRandomPoint, 1000/60);
-//	    console.log("x: " + x + " y: " + y);
-//	};
-
-//	drawRandomPoint();
     }, true);
 
 })(window, document);
