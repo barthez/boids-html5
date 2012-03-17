@@ -6,7 +6,8 @@
  * @license MIT
 */
 
-//window.requestAnimationFrameJS = "force";
+
+window.requestAnimationFrameJS = "force";
 
 (function (window) {
 

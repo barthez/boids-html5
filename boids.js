@@ -78,20 +78,24 @@ Boid.prototype = new Vector();
 Boid.prototype.constructor = Boid;
 
 Boid.prototype.draw = function(ctx) {
+//    debugger
     ctx.fillStyle = this.color;
     var v_length = this.velocity.length();
     var sin = this.velocity.x/v_length;
     var cos = this.velocity.y/v_length;
     
-    ctx.setTransform(cos,sin,-sin,cos,this.x, this.y);
+    ctx.setTransform(cos,-sin,sin,cos,this.x, this.y);
+
     ctx.beginPath();
-    ctx.moveTo(0, - 10);
-    ctx.lineTo(8, 10);
-    ctx.lineTo(0, 5);
-    ctx.lineTo(-8, 8);
-    ctx.lineTo(0,  -10);
+    ctx.moveTo(0, 10);
+    ctx.lineTo(8, -10);
+    ctx.lineTo(0, -5);
+    ctx.lineTo(-8, -8);
+    ctx.lineTo(0,  10);
     ctx.closePath();
     ctx.fill();
+
+    ctx.setTransform(1,0,0,1,this.x, this.y);    
     this.velocity.draw(ctx);
 }
 
@@ -101,15 +105,23 @@ Boid.prototype.update = function(boids) {
     var v = new Vector(0,0);
     for(var i=0; i<this.rules.length; ++i) {
 	var v1 = this.rules[i](this, boids);
-//	debugger;
+	debugger;
 	v.add(v1);
     }
+//    debugger
     this.velocity.add(v);
+    var len = this.velocity.length();
+    
+    //Limit the speed
+    var speed_limit = 5;
+    if (len > speed_limit) this.velocity.times(speed_limit/len);
+
     this.add(this.velocity);
 //    console.log(this.toString());
 }
 
 Boid.prototype.rules = [
+    //RULE1: Go to center of swarm
     function(b, boids) {
 	var vel = new Vector(0,0);
 	
@@ -119,22 +131,24 @@ Boid.prototype.rules = [
 	    }
 	}
 	//debugger;
-	return vel.times(1/(boids.length-1)).diff(b).times(1/100);
+	return vel.times(1/(boids.length-1)).diff(b).times(1/10000);
     },
+    //RULE2: Keep distance from nearest boids
     function(b, boids) {
 	var vel = new Vector(0,0);
  	
 	for(var i=0; i < boids.length; ++i) {
 	    if (boids[i].id != b.id) {
 		var v_diff = b.copy().diff(boids[i]);
-		if (v_diff.length() < 20) {
+		if (v_diff.length() < 1000) {
 		    vel.diff(v_diff);
 		}
 	    }
 	}
 	//debugger;
-	return vel.times(1);
+	return vel.times(1/2000);
     },
+    //RULE3: Keep mean velocity of swarm
     function(b, boids) {
 	var vel = new Vector(0,0);
  	
@@ -144,11 +158,12 @@ Boid.prototype.rules = [
 	    }
 	}
 	//debugger;
-	return vel.times( 1/(boids.length-1) ).diff(b.velocity).times(1/8);
+	return vel.times( 1/(boids.length-1) ).diff(b.velocity).times(1/800);
     },
+    //RULE4: Don't go out of box
     function(b) {
 	var vel = new Vector(0,0);
-	var power = 5;
+	var power = 1;
  	if (b.x < 10) {
 	    vel.x = power;
 	} else if (b.x > 790) {
