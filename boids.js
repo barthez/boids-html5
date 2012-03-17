@@ -146,7 +146,7 @@ Boid.prototype.rules = [
 	for(var i=0; i < boids.length; ++i) {
 	    if (boids[i].id != b.id) {
 		var v_diff = b.copy().diff(boids[i]);
-		if (v_diff.length() < 60) {
+		if (v_diff.length() < 40) {
 		    vel.diff(v_diff);
 		}
 	    }
@@ -191,9 +191,11 @@ Boid.prototype.toString = function() {
 }
 
 
-function Simulation(ctx) {
+function Simulation(ctx, boids_number) {
+    if (!boids_number) boids_number = 10;
     this._ctx = ctx;
     this._boids = [];
+    this._boids_number = boids_number;
     this._start_time = 0;
     this._last_time = 0;
     this._is_running = false;
@@ -235,7 +237,7 @@ Simulation.prototype.pause = function() {
 Simulation.prototype.__init = function() {
     this._start_time = Date.now();
     //Add 10 boids
-    for(var i=0; i<10; ++i) {
+    for(var i=0; i<this._boids_number; ++i) {
 	var x = (0.5 + Math.random() * 800) | 0;
 	var y = (0.5 + Math.random() * 600) | 0;	    
 	var b = new Boid(Boid.getNextId(), x, y);
@@ -286,7 +288,7 @@ Simulation.prototype.__draw = function() {
 	var canvas = document.getElementById('boids_canvas');
 	var context = canvas.getContext('2d');
 
-	var sim = new Simulation(context);
+	var sim = new Simulation(context, 10);
 	sim.run();
 
 //	var drawRandomPoint = function() {
