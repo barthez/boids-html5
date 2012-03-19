@@ -53,7 +53,7 @@ KeepDistance.prototype.computeVelocity = function(boid, boids, predators) {
 	    }
 	}
     }
-    return v.times(-1/50);
+    return v.times(-1/30);
 };
 
 
@@ -128,8 +128,8 @@ function KeepOutsideCircle(center, radius) {
     this.center = center;
     this.radius = radius;
 
-    this.distance = 20;
-    this.power = 0.1;
+    this.distance = 40;
+    this.power = 0.07;
 };
 
 KeepOutsideCircle.prototype = new BehaviourRule();
