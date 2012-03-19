@@ -52,7 +52,7 @@ function Boid(id, x, y) {
     this.id = id;
     this.velocity = new Vector(0,0);
     this.color = "green";
-
+    this.rules = [];
 }
 
 Boid._last_id = 0;
@@ -91,92 +91,21 @@ Boid.prototype.draw = function(ctx) {
 }
 
 Boid.prototype.update = function(boids) {
-//    console.log(this.toString());
-//    console.log("Updating " + this.id);
-//    if (this.color == '#000') {
-//	debugger
-//    }
+
     var v = new Vector(0,0);
     for(var i=0; i<this.rules.length; ++i) {
-	var v1 = this.rules[i](this, boids);
-//	debugger;
+	var v1 = this.rules[i].computeVelocity(this, boids, []);
 	v.add(v1);
     }
-//    debugger
     this.velocity.add(v);
     var len = this.velocity.length();
     
     //Limit the speed
-    var speed_limit = 5;
+    var speed_limit = 3;
     if (len > speed_limit) this.velocity.times(speed_limit/len);
 
     this.add(this.velocity);
-//    console.log(this.toString());
 }
-
-Boid.prototype.rules = [
-    //RULE1: Go to center of swarm
-    function(b, boids) {
-	var vel = new Vector(0,0);
-	
-	for(var i=0; i < boids.length; ++i) {
-	    if (boids[i].id != b.id) {
-		//var v_diff = b.copy().diff(boids[i]);
-		//if (v_diff.length() < 500) {
-		    vel.add(boids[i]);
-		//}
-	    }
-	}
-	//debugger;
-	return vel.times(1/(boids.length-1)).diff(b).times(1/500);
-    },
-    //RULE2: Keep distance from nearest boids
-    function(b, boids) {
-	var vel = new Vector(0,0);
- 	
-	for(var i=0; i < boids.length; ++i) {
-	    if (boids[i].id != b.id) {
-		var v_diff = b.copy().diff(boids[i]);
-		if (v_diff.length() < 40) {
-		    vel.diff(v_diff);
-		}
-	    }
-	}
-	//debugger;
-	return vel.times(-1/100);
-    },
-    //RULE3: Keep mean velocity of swarm
-    function(b, boids) {
-	var vel = new Vector(0,0);
- 	
-	for(var i=0; i < boids.length; ++i) {
-	    if (boids[i].id != b.id) {
-		vel.add(b.velocity);
-	    }
-	}
-	//debugger;
-	return vel.times( 1/(boids.length-1) ).diff(b.velocity).times(1/50);
-    },
-    //RULE4: Don't go out of box
-    function(b) {
-	var vel = new Vector(0,0);
-	var power = 0.05;
-	var d = 50;
- 	if (b.x < d) {
-	    vel.x = (d - b.x)*power;
-	} else if (b.x > 800 - d) {
-	    vel.x = (800 - d - b.x)*power;
-	}
-
- 	if (b.y < d) {
-	    vel.y = (d - b.y)*power;
-	} else if (b.y > 600 -d) {
-	    vel.y = (600 -d - b.y)*power;
-	}
-
-	return vel;
-    }
-];
 
 Boid.prototype.toString = function() {
     return this.id + " (" + this.x + ", " + this.y +")";
