@@ -11,7 +11,12 @@
 			    new KeepDistance(),
 			    new KeepSpeed(),
 			    new KeepInsideBox(new Vector(10,10), canvas_size),
-			    new StaticForce( new Vector(0.02, 0) )  ];
+			    new StaticForce( new Vector(0.02, 0) ),
+			    new KeepOutsideCircle( new Vector( 100, 150), 50 ),
+			    new KeepOutsideCircle( new Vector( 300, 400), 40 ),
+			    new KeepOutsideCircle( new Vector( 500, 200), 30 ),
+			    new KeepOutsideCircle( new Vector( 400, 600), 60 )
+			  ];
 
 	var sim = new Simulation(context, 10, boids_rules);
 

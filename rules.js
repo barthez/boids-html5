@@ -124,6 +124,46 @@ KeepInsideBox.prototype.draw = function(ctx) {
     ctx.stroke();
 };
 
+function KeepOutsideCircle(center, radius) {
+    this.center = center;
+    this.radius = radius;
+
+    this.distance = 20;
+    this.power = 0.1;
+};
+
+KeepOutsideCircle.prototype = new BehaviourRule();
+KeepOutsideCircle.prototype.constuctor = KeepOutsideCircle;
+
+KeepOutsideCircle.prototype.computeVelocity = function(boid, boids, predators) {
+    var v = new Vector(0,0);
+    
+    var power = this.power;
+    var d = this.distance;
+
+    var diff = this.center.copy().diff(boid);
+    var len = diff.length();
+    
+    if (len < d+this.radius) {
+	v = diff.times(-power*(d + this.radius - len)/len);
+    }
+
+    return v;
+
+};
+
+KeepOutsideCircle.prototype.draw = function(ctx) {
+    ctx.setTransform(1,0,0,1,0,0);
+    
+    ctx.beginPath();
+    ctx.moveTo(this.center.x, this.center.y);
+    ctx.arc(this.center.x, this.center.y, this.radius, -Math.PI, Math.PI, true);
+    ctx.closePath();
+    
+    ctx.fillStyle = "rgba(0,0,0, 0.8)";
+    ctx.fill();
+};
+
 function StaticForce(force) {
     this.force = force;
 }
