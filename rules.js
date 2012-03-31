@@ -106,7 +106,7 @@ function KeepInsideBox(up_left, bottom_right) {
     this.bottom = bottom_right.y;
 
     this.distance = 10;
-    this.power = 0.05;
+    this.power = 0.1;
     this.blocking_power = 10;
 };
 
@@ -117,6 +117,7 @@ KeepInsideBox.prototype.computeVelocity = function(boid, boids, predators) {
     	var vel = new Vector(0,0);
 	var power = this.power;
 	var d = this.distance;
+/*
  	if (boid.x < this.left + d) {
 	    vel.x = (this.left + d - boid.x)*power;
 	    if (boid.x <= this.left && !(boid instanceof Predator)) {
@@ -140,6 +141,22 @@ KeepInsideBox.prototype.computeVelocity = function(boid, boids, predators) {
 		vel.y = -this.blocking_power;
 	    }
 	}
+*/
+ 	if (boid.x < this.left + d) {
+	    var dx = this.left + d - boid.x;
+	    vel.x = Math.abs(boid.velocity.x * dx) + power;
+	} else if (boid.x > this.right - d) {
+	    var dx = this.right - d - boid.x;
+	    vel.x = -Math.abs(boid.velocity.x * dx) - power;
+	}
+
+ 	if (boid.y < this.top + d) {
+	    var dy = this.top + d - boid.y;
+	    vel.y = Math.abs(boid.velocity.y * dy) + power;
+	} else if (boid.y > this.bottom - d) {
+	    var dy = this.bottom - d - boid.y;
+	    vel.y = -Math.abs(boid.velocity.y * dy) - power;
+	 }
 
 	return vel;
 
