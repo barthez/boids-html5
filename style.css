@@ -1,3 +1,4 @@
+
 body {
   width: 800px;
   margin: 0 auto;
@@ -17,4 +18,19 @@ a, a:link, a:visited {
 
 a:hover, a:focus {
     text-decoration: underline;
+}
+
+input.control {
+    background: #EEE;
+    border: 1px solid #AAA;
+    line-height: 30px;
+    font-size: 15px;
+    color: #333;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+
+.field {
+    display: inline-block;
+    margin: 2px 5px;
 }
