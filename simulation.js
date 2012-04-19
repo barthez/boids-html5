@@ -1,14 +1,15 @@
 
-function Simulation(ctx, boids_number, boids_rules, pred_num, pred_rules) {
+function Simulation(canvas, boids_number, boids_rules, pred_num, pred_rules) {
     if (!boids_number) boids_number = 10;
     if (!boids_rules || boids_rules.length == 0) {
-	boids_rules = BehaviourRule.DefaultBoidsRules();
+	boids_rules = BehaviourRule.DefaultBoidsRules(this);
     }
     if (!pred_num && pred_num !== 0) pred_num = 1;
     if (!pred_rules || pred_rules.length == 0) {
-	pred_rules = BehaviourRule.DefaultPredatorsRules();
+	pred_rules = BehaviourRule.DefaultPredatorsRules(this);
     }
-    this._ctx = ctx;
+    this._canvas = canvas;
+    this._ctx = this._canvas.getContext('2d');
     this._boids = [];
     this._boids_number = boids_number;
     this._pred = [];
@@ -38,6 +39,10 @@ function Simulation(ctx, boids_number, boids_rules, pred_num, pred_rules) {
     ]);
     this.boids_rules = boids_rules;
     this.pred_rules = pred_rules;
+
+    this.speed_impact = 90;
+    this.center_impact = 90;
+    this.distance_impact = 90;
 
     this.__init();
 }
@@ -182,7 +187,9 @@ Simulation.prototype.__update = function() {
 
 Simulation.prototype.__draw = function() {
     this._ctx.setTransform(1,0,0,1,0,0);
-    this._ctx.clearRect(0,0,800,600);
+    this._ctx.clearRect(0,0,
+            this._canvas.width,
+            this._canvas.height);
 
     for(var i=0; i < this.boids_rules.length; i++) {
 	this.boids_rules[i].draw(this._ctx);

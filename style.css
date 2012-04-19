@@ -1,13 +1,13 @@
 
 body {
-  width: 800px;
+  width: 1200px;
   margin: 0 auto;
   font-family: Tahoma, Verdana, sans-serif;
 }
 
 canvas#boids_canvas {
-  width: 800px;
-  height: 600px;
+/*  width: 800px;
+  height: 600px; */
   display: block;
 }
 
