@@ -1,4 +1,4 @@
-
+var LOCAL = 30;
 function BehaviourRule() {
 
 }
@@ -35,7 +35,7 @@ SteerToCenter.prototype.computeVelocity = function(boid, boids, predators) {
     if (boids.length <= 1) return v;
 
     for(var i=0; i < boids.length; ++i) {
-        if (boids[i].id != boid.id) {
+        if (boids[i].id != boid.id ) {
             v.add(boids[i]);
         }
     }
@@ -345,5 +345,5 @@ RunAway.prototype.computeVelocity = function(boid, boids, predators) {
     //	console.log(boid.toString());
     //    }
 
-    return v.times(0.6/dd);
+    return v.times(1.9/dd);
 };

@@ -24,10 +24,10 @@
 			    new KeepDistance(),
 			    new KeepInsideBox(new Vector(10,10), canvas_size),
 			    //new StaticForce( new Vector(0.02, 0) ),
-			    new KeepOutsideCircle( new Vector( 100, 150), 50 ),
-			    new KeepOutsideCircle( new Vector( 300, 400), 40 ),
-			    new KeepOutsideCircle( new Vector( 500, 200), 30 ),
-			    new KeepOutsideCircle( new Vector( 400, 600), 60 ),
+			    //new KeepOutsideCircle( new Vector( 100, 150), 50 ),
+			    //new KeepOutsideCircle( new Vector( 300, 400), 40 ),
+			    //new KeepOutsideCircle( new Vector( 500, 200), 30 ),
+			    //new KeepOutsideCircle( new Vector( 400, 600), 60 ),
 			    new ChasePray()
 			  ];
 	var boids_number = document.getElementById('settings_boids_number');
@@ -66,10 +66,19 @@
 	}, true);
 
 	canvas.addEventListener('click', function(event) {
-	    console.log(event);
+	    //console.log(event);
 	    var point = new Vector(event.offsetX, event.offsetY);
 	    sim.addBoidsRule( new AttractToPoint(point, 5000) ); 
 	}, true);
+
+	canvas.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+	    //console.log(event);
+	    var point = new Vector(event.offsetX, event.offsetY);
+	    sim.addBoidsRule( new KeepOutsideCircle( point, 50 ) ); 
+	}, true);
+
+
 
 	//Run simulation
 	sim.run();
